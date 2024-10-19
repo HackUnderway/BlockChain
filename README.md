@@ -19,10 +19,6 @@ A tool to view the total transactions, received, sent, and current balance of Bi
 **WEBSITE:**
 https://hackunderway.com/
 
-# REQUIREMENTS
-```
-pip install -r requirements.txt
-```
 # USAGE
 ```
 git clone https://github.com/HackUnderway/BlockChain.git
@@ -32,6 +28,10 @@ cd BlockChain
 ```
 ```
 python3 blockchain.py
+```
+# REQUIREMENTS
+```
+pip install -r requirements.txt
 ```
 # SUPPORT
 Questions, bugs or suggestions to : info@hackunderway.com
