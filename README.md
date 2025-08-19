@@ -62,5 +62,3 @@ Patreon: https://www.patreon.com/HackUnderway
 from <img src="https://i.imgur.com/ngJCbSI.png" title="Perú"> made in <img src="https://i.imgur.com/NNfy2o6.png" title="Python"> with <img src="https://i.imgur.com/S86RzPA.png" title="Love"> by: <font color="red">Victor Bancayan</font>
 
 © 2025
-
-© 2024
