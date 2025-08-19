@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 import requests
+import os
+from datetime import datetime
 from colorama import Fore, Style, init
-import pyfiglet
 
-#banner = pyfiglet.figlet_format("Bitcoin")
-#print(banner)
+os.system("printf '\033]2;₿lockChain v2.0 👨🏽‍💻\a'")
 
-# Inicializar colorama
 init(autoreset=True)
 
-# Arte ASCII
+# Arte ASCII BTC
 ascii_art = '''
                    .,:ldxxxxdl:,.                   
               .':oxxxxxxxxxxxxxxxxo:,.              
@@ -36,52 +35,54 @@ dxxxxxxxxxxxxxxxxxNMMMMXO0KXNMMMMMNOxxxxxxxxxxxxxxxd
           ;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx:          
              .xxxxxxxxxxxxxxxxxxxxxxxx.             
                    xxxxxxxxxxxxxx.                  
-                         lo               
+                         lo
 '''
 
-# Función para colorear el arte ASCII
 def print_colored_ascii(art):
     for line in art.splitlines():
         colored_line = ""
         for char in line:
             if char == 'x':
-                # Naranja para las 'x'
                 colored_line += Fore.LIGHTYELLOW_EX + char
             elif char in ['M', '0', 'K', 'W']:
-                # Blanco para las letras y números
                 colored_line += Fore.WHITE + char
             else:
-                # Default sin color
                 colored_line += Style.RESET_ALL + char
         print(colored_line)
-    # Reset the color after finishing
     print(Style.RESET_ALL)
 
-# Imprimir el arte coloreado
-print_colored_ascii(ascii_art)
+def satoshi_to_btc(satoshi):
+    return satoshi / 100000000
 
-
-# Función para obtener información de una dirección de ₿itcoin
 def get_btc_info(btc_address):
-    # Usa el servicio de blockchain.info para obtener información sobre la dirección
     url = f"https://blockchain.info/rawaddr/{btc_address}"
-    
     try:
         response = requests.get(url)
         data = response.json()
         
-        print(Fore.LIGHTGREEN_EX + f"Dirección BTC: {data.get('address', 'No disponible')}")
-        print(Fore.LIGHTGREEN_EX + f"Transacciones totales: {data.get('n_tx', 'No disponible')}")
-        print(Fore.LIGHTGREEN_EX + f"Cantidad total recibida (en satoshis): {data.get('total_received', 'No disponible')}")
-        print(Fore.LIGHTGREEN_EX + f"Cantidad total enviada (en satoshis): {data.get('total_sent', 'No disponible')}")
-        print(Fore.LIGHTGREEN_EX + f"Balance actual (en satoshis): {data.get('final_balance', 'No disponible')}")
+        print(Fore.LIGHTGREEN_EX + f"\n[+] BTC Wallet: {data.get('address')}")
+        print(Fore.LIGHTGREEN_EX + f" ├──Total Balance : {satoshi_to_btc(data.get('final_balance'))} BTC")
+        print(Fore.LIGHTGREEN_EX + f" ├──Total Transactions : {data.get('n_tx')}")
+        print(Fore.LIGHTGREEN_EX + f" ├──Total Received : {satoshi_to_btc(data.get('total_received'))} BTC")
+        print(Fore.LIGHTGREEN_EX + f" ├──Total Sent : {satoshi_to_btc(data.get('total_sent'))} BTC")
+        
+        if 'txs' in data and len(data['txs']) > 0:
+            first_tx = data['txs'][-1]  # La primera transacción es la última en la lista
+            timestamp = first_tx.get('time')
+            date = datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+            print(Fore.LIGHTGREEN_EX + f" └──First Transaction : {date} (timestamp: {timestamp})")
     
     except Exception as e:
-        print(Fore.RED + f"Error obteniendo información de la dirección BTC: {e}")
+        print(Fore.RED + f"Error: {e}")
 
 if __name__ == "__main__":
+    print_colored_ascii(ascii_art)
+
+    # Author
+    firma = "By: Hack Underway\n"
+    print(Style.BRIGHT + Fore.WHITE + firma.rjust(35) + Style.RESET_ALL)
+
     btc_address = input(Style.BRIGHT + Fore.LIGHTYELLOW_EX + "Introduce una dirección de ₿itcoin: " + Style.RESET_ALL)
     get_btc_info(btc_address)
-
-# Texto con negrita y color rojo usando colorama
-print("\n\n\t" + Style.BRIGHT + "BlockChain OSINT " + Fore.RED + "I like to See You, Happy OSINT " + Style.RESET_ALL + "😃\n\n")
+    
+    print("\n" + " " * 2 + Style.BRIGHT + Fore.RED + "BlockChain OSINT " + Fore.WHITE + Style.BRIGHT + "I like to See You " + Fore.RED + "Happy OSINT" + Style.RESET_ALL + " 🚀\n")
